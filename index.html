@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveLume - Merge Your Moons, Seal Your Love</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            background: radial-gradient(circle, #020202, #000000, #01010A);
+            animation: gradientMove 20s ease infinite alternate;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        .stars::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+            border-radius: 50%;
+            top: -3px;
+            left: -3px;
+            opacity: 0.4;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.7); }
+            50% { opacity: 0.9; transform: scale(1.3); }
+            100% { opacity: 0.1; transform: scale(0.7); }
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5); /* Glow kam kiya */
+            color: #ff69b4;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+
+        .hero p:hover {
+            transform: scale(1.05);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(45deg, #ff1493, #8a2be2);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(255, 105, 180, 0.5);
+        }
+
+        .sections-container {
+            display: flex;
+            justify-content: center;
+            width: 80%;
+            margin-top: 1.5rem;
+        }
+
+        .left-section {
+            text-align: center;
+        }
+
+        .left-section h2 {
+            font-size: 1.8rem;
+            color: #ff69b4;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5); /* Yeh wahi rakha */
+            transition: transform 0.3s ease;
+        }
+
+        .left-section h2:hover {
+            transform: scale(1.05);
+        }
+
+        .left-section p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin: 0.5rem 0;
+            transition: transform 0.3s ease;
+        }
+
+        .left-section p:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            padding-top: 7px;
+            position: absolute;
+            bottom: 1rem;
+            text-align: center;
+            width: 100%;
+            color: #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+
+        .footer:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .sections-container {
+                flex-direction: column;
+                text-align: center;
+                margin-top: 1.5rem;
+            }
+
+            .left-section {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Twinkling Stars -->
+    <script>
+        function createStars(count) {
+            for (let i = 0; i < count; i++) {
+                let star = document.createElement("div");
+                star.className = 'stars';
+
+                let x = Math.random() * window.innerWidth;
+                let y = Math.random() * window.innerHeight;
+                let delay = Math.random() * 5;
+
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.animationDelay = `${delay}s`;
+
+                document.body.appendChild(star);
+            }
+        }
+
+        createStars(250);
+    </script>
+
+    <!-- Hero Section -->
+    <div class="container hero">
+        <h1>LoveLume</h1>
+        <p>When two moons collide, magic happens—merge your moons, seal your love, and capture your cosmic connection—written in the stars.</p>
+        <a href="wallpaper.html" class="btn">Create Your Moon Wallpaper</a>
+    </div>
+
+    <!-- Features and How It Works Section -->
+    <div class="sections-container">
+        <div class="left-section">
+            <h2>Why Choose LoveLume?</h2>
+            <p>✨ Customize with Zodiac Signs</p>
+            <p>🌟 Add a Magical Glow Effect</p>
+            <p>❤️ Discover Your Love Percentage</p>
+            <p>🌌 Dynamic Cosmic Backgrounds</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2025 LoveLume. All rights reserved.
+    </div>
+</body>
+</html>

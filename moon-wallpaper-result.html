@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Wallpaper Result</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #020202, #01010A);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            position: relative;
+            top: -30px;
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+            color: #ff69b4;
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover {
+            transform: scale(1.05);
+        }
+
+        .preview-container {
+            width: 370px;
+            height: 600px;
+            border: 2px solid white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #000000;
+            top: -20px;
+            margin-bottom: 2px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .preview-container:hover {
+            transform: scale(1.02);
+            border-color: #ff69b4;
+        }
+
+        #moonCanvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #loading {
+            position: absolute;
+            color: #e0e0e0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        #loading:hover {
+            transform: scale(1.05);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ff69b4;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 0px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff1493, #8a2be2);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(255, 105, 180, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+                top: -20px;
+                margin-bottom: 4px;
+            }
+
+            .preview-container {
+                width: 90vw;
+                height: calc(90vw * 1.6);
+                max-height: 70vh;
+                top: -15px;
+                margin-bottom: 1px;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 0px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.2rem;
+                top: -15px;
+                margin-bottom: 3px;
+            }
+
+            .preview-container {
+                width: 85vw;
+                height: calc(85vw * 1.6);
+                top: -10px;
+                margin-bottom: 1px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .stars::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+            border-radius: 50%;
+            top: -3px;
+            left: -3px;
+            opacity: 0.4;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.7); }
+            50% { opacity: 0.9; transform: scale(1.3); }
+            100% { opacity: 0.1; transform: scale(0.7); }
+        }
+    </style>
+    <!-- Preload Images -->
+    <link rel="preload" href="images/January.png" as="image">
+    <link rel="preload" href="images/February.png" as="image">
+    <link rel="preload" href="images/March.png" as="image">
+    <link rel="preload" href="images/April.png" as="image">
+    <link rel="preload" href="images/May.png" as="image">
+    <link rel="preload" href="images/June.png" as="image">
+    <link rel="preload" href="images/July.png" as="image">
+    <link rel="preload" href="images/August.png" as="image">
+    <link rel="preload" href="images/September.png" as="image">
+    <link rel="preload" href="images/October.png" as="image">
+    <link rel="preload" href="images/November.png" as="image">
+    <link rel="preload" href="images/December.png" as="image">
+</head>
+<body>
+    <script>
+        function createStars(count) {
+            for (let i = 0; i < count; i++) {
+                let star = document.createElement("div");
+                star.className = 'stars';
+
+                let x = Math.random() * window.innerWidth;
+                let y = Math.random() * window.innerHeight;
+                let delay = Math.random() * 5;
+
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.animationDelay = `${delay}s`;
+
+                document.body.appendChild(star);
+            }
+        }
+
+        let lovePercentageText = '';
+        let boyImage, girlImage, glowEffect, lovePercentageEnabled, zodiacEnabled, boyZodiacEmoji, girlZodiacEmoji;
+
+        const zodiacEmojis = {
+            'Aries': '♈', 'Taurus': '♉', 'Gemini': '♊', 'Cancer': '♋', 'Leo': '♌',
+            'Virgo': '♍', 'Libra': '♎', 'Scorpio': '♏', 'Sagittarius': '♐', 'Capricorn': '♑',
+            'Aquarius': '♒', 'Pisces': '♓'
+        };
+
+        window.onload = function() {
+            createStars(250);
+
+            const params = new URLSearchParams(window.location.search);
+            const boyMonth = params.get('boyMonth');
+            const girlMonth = params.get('girlMonth');
+            const boyZodiac = params.get('boyZodiac');
+            const girlZodiac = params.get('girlZodiac');
+            glowEffect = params.get('glowEffect') === 'true';
+            lovePercentageEnabled = params.get('lovePercentage') === 'true';
+            zodiacEnabled = params.get('zodiacEnabled') === 'true';
+
+            boyZodiacEmoji = zodiacEnabled ? (zodiacEmojis[boyZodiac] || '') : '';
+            girlZodiacEmoji = zodiacEnabled ? (zodiacEmojis[girlZodiac] || '') : '';
+
+            const canvas = document.getElementById('moonCanvas');
+            const ctx = canvas.getContext('2d');
+
+            boyImage = new Image();
+            girlImage = new Image();
+
+            boyImage.src = `images/${boyMonth}.png`;
+            girlImage.src = `images/${girlMonth}.png`;
+
+            let imagesLoaded = 0;
+
+            function checkLoaded() {
+                imagesLoaded++;
+                if (imagesLoaded === 2) {
+                    drawImages(ctx);
+                    drawCenteredText(ctx);
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+
+            boyImage.onload = checkLoaded;
+            girlImage.onload = checkLoaded;
+        };
+
+        function drawImageScaled(img, ctx, x, y, width, height, glow) {
+            const imgRatio = img.width / img.height;
+            const canvasRatio = width / height;
+
+            let drawWidth, drawHeight;
+
+            if (imgRatio > canvasRatio) {
+                drawWidth = width;
+                drawHeight = width / imgRatio;
+            } else {
+                drawHeight = height;
+                drawWidth = height * imgRatio;
+            }
+
+            const offsetX = (width - drawWidth) / 2;
+            const offsetY = (height - drawHeight) / 2;
+
+            if (glow) {
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+                ctx.shadowBlur = 50;
+            }
+
+            ctx.drawImage(img, x + offsetX, y + offsetY, drawWidth, drawHeight);
+            ctx.shadowBlur = 0;
+        }
+
+        function drawImages(ctx) {
+            drawImageScaled(boyImage, ctx, 0, 0, 540, 480, glowEffect); // Half size for preview
+            drawImageScaled(girlImage, ctx, 0, 480, 540, 480, glowEffect); // Half size for preview
+        }
+
+        function drawCenteredText(ctx) {
+            ctx.font = '25px Arial'; // Half size for preview
+            ctx.fillStyle = '#ff69b4';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(177, 130, 154, 0.8)';
+            ctx.shadowBlur = 5; // Reduced for smaller canvas
+
+            const zodiacText = zodiacEnabled ? `${boyZodiacEmoji}${girlZodiacEmoji}` : '';
+            const lovePercentage = lovePercentageEnabled ? Math.floor(Math.random() * 21) + 80 : '';
+            lovePercentageText = lovePercentageEnabled ? `${lovePercentage}% Love` : '';
+
+            if (zodiacEnabled && lovePercentageEnabled) {
+                ctx.fillText(zodiacText, 540 / 2 - 50, 875);
+                ctx.fillText(lovePercentageText, 540 / 2 + 50, 875);
+            } else if (zodiacEnabled) {
+                ctx.fillText(zodiacText, 540 / 2, 875);
+            } else if (lovePercentageEnabled) {
+                ctx.fillText(lovePercentageText, 540 / 2, 875);
+            }
+
+            ctx.shadowBlur = 0;
+        }
+
+        function downloadWallpaper() {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 1080;
+            tempCanvas.height = 1920;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            drawImageScaled(boyImage, tempCtx, 0, 0, 1080, 960, glowEffect);
+            drawImageScaled(girlImage, tempCtx, 0, 960, 1080, 960, glowEffect);
+
+            tempCtx.font = '50px Arial';
+            tempCtx.fillStyle = '#ff69b4';
+            tempCtx.textAlign = 'center';
+            tempCtx.shadowColor = 'rgba(177, 130, 154, 0.8)';
+            tempCtx.shadowBlur = 10;
+
+            const zodiacText = zodiacEnabled ? `${boyZodiacEmoji}${girlZodiacEmoji}` : '';
+            const lovePercentage = lovePercentageEnabled ? Math.floor(Math.random() * 21) + 80 : '';
+            const lovePercentageText = lovePercentageEnabled ? `${lovePercentage}% Love` : '';
+
+            if (zodiacEnabled && lovePercentageEnabled) {
+                tempCtx.fillText(zodiacText, 1080 / 2 - 100, 1750);
+                tempCtx.fillText(lovePercentageText, 1080 / 2 + 100, 1750);
+            } else if (zodiacEnabled) {
+                tempCtx.fillText(zodiacText, 1080 / 2, 1750);
+            } else if (lovePercentageEnabled) {
+                tempCtx.fillText(lovePercentageText, 1080 / 2, 1750);
+            }
+
+            tempCtx.shadowBlur = 0;
+
+            tempCtx.globalCompositeOperation = 'destination-over';
+            tempCtx.fillStyle = '#000000';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+            const link = document.createElement('a');
+            link.download = 'moon_wallpaper.png';
+            link.href = tempCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function regenerateWallpaper() {
+            window.location.href = 'wallpaper.html';
+        }
+    </script>
+
+    <h1>Your Custom Moon Wallpaper</h1>
+
+    <div class="preview-container">
+        <canvas id="moonCanvas" width="540" height="960"></canvas> <!-- Half size for preview -->
+        <div id="loading">Generating... <span class="spinner"></span></div>
+    </div>
+
+    <div class="button-container">
+        <button onclick="downloadWallpaper()">Download Your Moon Wallpaper</button>
+        <button onclick="regenerateWallpaper()">Regenerate</button>
+    </div>
+</body>
+</html>

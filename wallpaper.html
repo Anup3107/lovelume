@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveLume - Input Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif; /* Modern font */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(circle, #020202, #000000, #01010A);
+            animation: gradientMove 20s ease infinite alternate;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        .stars::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+            border-radius: 50%;
+            top: -3px;
+            left: -3px;
+            opacity: 0.4;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.7); }
+            50% { opacity: 0.9; transform: scale(1.3); }
+            100% { opacity: 0.1; transform: scale(0.7); }
+        }
+
+        .container {
+            border-radius: 20px;
+            padding: 30px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5); /* Glowing title */
+            color: #ff69b4;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 105, 180, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            color: white; /* Selected text white */
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #ff69b4;
+            transform: scale(1.02); /* Slight scale on hover */
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.5); /* Subtle glow */
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+        }
+
+        select option {
+            color: black; /* Options ka text black */
+            background: white; /* Options ka background white */
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 10px 0;
+            transition: transform 0.3s ease; /* Smooth transition for hover */
+        }
+
+        .checkbox-container:hover {
+            transform: scale(1.05); /* Slight scale on hover */
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff69b4;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        input[type="checkbox"]:hover {
+            background: rgba(255, 105, 180, 0.2); /* Faint pink on hover */
+            transform: scale(1.1); /* Slight scale */
+        }
+
+        input[type="checkbox"]:checked {
+            background: #ff69b4;
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '✔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+        }
+
+        .checkbox-label {
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .zodiac-section {
+            display: none; /* Shuru mein hide rahega */
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff1493, #8a2be2);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3); /* Kam glow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(255, 105, 180, 0.5); /* Hover pe thoda zyada, par kam */
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .btn {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function createStars(count) {
+            for (let i = 0; i < count; i++) {
+                let star = document.createElement("div");
+                star.className = 'stars';
+
+                let x = Math.random() * window.innerWidth;
+                let y = Math.random() * window.innerHeight;
+                let delay = Math.random() * 5;
+
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.animationDelay = `${delay}s`;
+
+                document.body.appendChild(star);
+            }
+        }
+
+        createStars(250);
+    </script>
+
+    <div class="container">
+        <h1>LoveLume</h1>
+
+        <label for="boy-month">Boy's Birth Month</label>
+        <select id="boy-month">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+        </select>
+
+        <label for="girl-month">Girl's Birth Month</label>
+        <select id="girl-month">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+        </select>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="glow-effect">
+            <label class="checkbox-label" for="glow-effect">Apply Glow Effect</label>
+        </div>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="love-percentage">
+            <label class="checkbox-label" for="love-percentage">Show Love Percentage</label>
+        </div>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="zodiac-enabled" onchange="toggleZodiacSection()">
+            <label class="checkbox-label" for="zodiac-enabled">Add Zodiac Signs</label>
+        </div>
+
+        <div class="zodiac-section" id="zodiac-section">
+            <label for="boy-zodiac">Boy's Zodiac Sign</label>
+            <select id="boy-zodiac">
+                <option value="Aries">Aries ♈</option>
+                <option value="Taurus">Taurus ♉</option>
+                <option value="Gemini">Gemini ♊</option>
+                <option value="Cancer">Cancer ♋</option>
+                <option value="Leo">Leo ♌</option>
+                <option value="Virgo">Virgo ♍</option>
+                <option value="Libra">Libra ♎</option>
+                <option value="Scorpio">Scorpio ♏</option>
+                <option value="Sagittarius">Sagittarius ♐</option>
+                <option value="Capricorn">Capricorn ♑</option>
+                <option value="Aquarius">Aquarius ♒</option>
+                <option value="Pisces">Pisces ♓</option>
+            </select>
+
+            <label for="girl-zodiac">Girl's Zodiac Sign</label>
+            <select id="girl-zodiac">
+                <option value="Aries">Aries ♈</option>
+                <option value="Taurus">Taurus ♉</option>
+                <option value="Gemini">Gemini ♊</option>
+                <option value="Cancer">Cancer ♋</option>
+                <option value="Leo">Leo ♌</option>
+                <option value="Virgo">Virgo ♍</option>
+                <option value="Libra">Libra ♎</option>
+                <option value="Scorpio">Scorpio ♏</option>
+                <option value="Sagittarius">Sagittarius ♐</option>
+                <option value="Capricorn">Capricorn ♑</option>
+                <option value="Aquarius">Aquarius ♒</option>
+                <option value="Pisces">Pisces ♓</option>
+            </select>
+        </div>
+
+        <button class="btn" onclick="submitForm()">Generate Moon Wallpaper</button>
+    </div>
+
+    <script>
+        function toggleZodiacSection() {
+            const zodiacSection = document.getElementById('zodiac-section');
+            const zodiacEnabled = document.getElementById('zodiac-enabled').checked;
+            zodiacSection.style.display = zodiacEnabled ? 'block' : 'none';
+        }
+
+        function submitForm() {
+            const boyMonth = document.getElementById('boy-month').value;
+            const girlMonth = document.getElementById('girl-month').value;
+            const glowEffect = document.getElementById('glow-effect').checked;
+            const lovePercentage = document.getElementById('love-percentage').checked;
+            const zodiacEnabled = document.getElementById('zodiac-enabled').checked;
+
+            const params = new URLSearchParams({
+                boyMonth,
+                girlMonth,
+                glowEffect,
+                lovePercentage,
+                zodiacEnabled
+            });
+
+            if (zodiacEnabled) {
+                const boyZodiac = document.getElementById('boy-zodiac').value;
+                const girlZodiac = document.getElementById('girl-zodiac').value;
+                params.set('boyZodiac', boyZodiac);
+                params.set('girlZodiac', girlZodiac);
+            }
+
+            window.location.href = `moon-wallpaper-result.html?${params}`;
+        }
+    </script>
+</body>
+</html>
